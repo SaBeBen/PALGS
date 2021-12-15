@@ -42,29 +42,17 @@ public class Gauss {
 
         double[][] helperA = Arrays.copyOf(A,A.length);
 
-        // Derzeitige Reihe ermitteln
-        int currentRow = 0;
-//        double current = 0;
-//        int currentRow = 0;
-//        for(int i = 0; i < A.length; i++){
-//            for(int j = 0; j < A[0].length; j++){
-//                if(Math.abs(A[i][j]) > current){
-//                    currentRow = i;
-//                    current = A[i][j];
-//                }
-//            }
-//        }
-
         for(int i = 0; i < A.length; i++) {
-            swap(helperA, i, findPivot(A,i));
+            swap(helperA, i, findPivot(A,i));       // Reihe mit pivot finden und mit derzeitiger swapen
             for (int j = i+1; j < A[0].length; j++) {
                 helperA[i][j] = helperA[i][j] / helperA[i][i];
+                helperB[j] -= helperA[i][j] * helperB[i];
                 for(int k = 0; k < A.length; k++){
                     helperA[j][k] = helperA[j][k] - helperA[i][k] * helperA[j][i];
                 }
             }
         }
-        backSubst(helperA, helperB);
+        helperB = backSubst(helperA, helperB);
         return helperB;
     }
 
@@ -109,7 +97,42 @@ public class Gauss {
      */
     public static double[] solveSing(double[][] A) {
         //TODO: Diese Methode ist zu implementieren
-        return null;
+        if(A.length == 0)
+            return null;
+        double[] result = new double[A.length];
+
+        double[][] helperA = Arrays.copyOf(A,A.length);
+        double[] helperB = new double[A.length];
+//        for(int i = 0; i < helperB.length; i++){
+//            helperB[i] = 0;
+//        }
+
+        double pivot = 1;
+
+        while (pivot > Math.pow(1,-10)) {
+            for (int i = 0; i < A.length; i++) {
+                int pivotRow = findPivot(A, i);
+                swap(helperA, i, pivotRow);       // Reihe mit pivot finden und mit derzeitiger swapen
+                for (int j = i + 1; j < A[0].length; j++) {
+                    helperA[i][j] = helperA[i][j] / helperA[i][i];
+                    helperB[j] -= helperA[i][j] * helperB[i];
+                    for (int k = 0; k < A.length; k++) {
+                        helperA[j][k] = helperA[j][k] - helperA[i][k] * helperA[j][i];
+                    }
+                }
+                for(int j = i; j < A[0].length; j++){       // find pivot element
+                    if(pivot < helperA[i][j])
+                        pivot = helperA[i][j];
+                }
+            }
+        }
+        for(int i = 0; i < helperB.length; i++){
+            helperB[i] = -helperB[i];
+        }
+
+        //TODO: Vektor (x,1,0,...,0) zurückgeben
+        result = backSubst(helperA, helperB);
+        return result;
     }
 
     /**
