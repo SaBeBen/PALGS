@@ -48,6 +48,9 @@ public class PageRank {
         double[][] probM = buildProbabilityMatrix(L, rho);
         if(probM == null)
             return null;
+        for(int i = 0; i < probM.length; i++){      // (A^~ - I) berechnen
+            probM[i][i] -= 1;
+        }
         double[] p = Gauss.solveSing(probM);
         if(p == null)
             return null;
