@@ -46,6 +46,8 @@ public class PageRank {
      */
     public static double[] rank(int[][] L, double rho) {
         double[][] probM = buildProbabilityMatrix(L, rho);
+        if(probM == null)
+            return null;
         double[] p = Gauss.solveSing(probM);
         if(p == null)
             return null;
