@@ -1,6 +1,5 @@
-import javax.crypto.AEADBadTagException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class Gauss {
 
@@ -50,6 +49,13 @@ public class Gauss {
         }
 
         for (int i = 0; i < helperA.length; i++) {
+            if (helperA[i][i] == 0) {       // Falls bereits ein Diagonalfeld 0 ist...
+                for (int j = 0; j < helperA.length; j++) {
+                    if (helperA[j][i] != 0) {
+                        swap(helperA, i, j); // muss dieses natürlich != 0 sein
+                    }
+                }
+            }
             swap(helperA, i, findPivot(helperA, i, 0));       // Reihe mit pivot finden und mit derzeitiger swapen
             for (int j = i + 1; j < helperA.length; j++) {
                 double factor = (helperA[j][i] / helperA[i][i]);    // Faktor bestimmen, sodass ...
@@ -82,6 +88,14 @@ public class Gauss {
         helperA[i] = Arrays.copyOf(helperA[pivotRow], helperA[pivotRow].length);
         helperA[pivotRow] = temp;
     }
+
+//    private static void swap(double[][] helperA, int i, int pivotRow, ) {
+//        if (i == pivotRow)
+//            return;
+//        double[] temp = Arrays.copyOf(helperA[i], helperA[i].length);
+//        helperA[i] = Arrays.copyOf(helperA[pivotRow], helperA[pivotRow].length);
+//        helperA[pivotRow] = temp;
+//    }
 
     // wenn die Matrix augmentiert ist, d h Ax = b -> Ab, dann muss die letzte Spalte nicht untersucht werden
     private static int findPivot(double[][] helperA, int startingRow, int isAugmented) {
@@ -150,15 +164,15 @@ public class Gauss {
         }
 
         // im Folgenden werden v und T ermittelt, um die Rückwärtssubst durchzuführen
-        double[][] T = new double[lastRow+1][lastRow+1];
-        double[] v = new double[lastRow+1];
+        double[][] T = new double[lastRow + 1][lastRow + 1];
+        double[] v = new double[lastRow + 1];
         for (int i = 0; i <= lastRow; i++) {
             for (int j = 0; j <= lastRow; j++) {
                 T[i][j] = helperA[i][j];
             }
         }
         for (int i = 0; i <= lastRow; i++) {
-            v[i] = -helperA[i][lastRow+1];
+            v[i] = -helperA[i][lastRow + 1];
         }
         double[] result = new double[A.length];
         v = backSubst(T, v);
@@ -168,10 +182,10 @@ public class Gauss {
             result[i] = v[i];
         }
         //anfügen der 1 und der 0en
-        if(result.length == v.length)
+        if (result.length == v.length)
             return result;
         result[v.length] = 1;
-        for (int i = v.length+1; i < result.length; i++) {
+        for (int i = v.length + 1; i < result.length; i++) {
             result[i] = 0;
         }
         return result;
