@@ -89,13 +89,6 @@ public class Gauss {
         helperA[pivotRow] = temp;
     }
 
-//    private static void swap(double[][] helperA, int i, int pivotRow, ) {
-//        if (i == pivotRow)
-//            return;
-//        double[] temp = Arrays.copyOf(helperA[i], helperA[i].length);
-//        helperA[i] = Arrays.copyOf(helperA[pivotRow], helperA[pivotRow].length);
-//        helperA[pivotRow] = temp;
-//    }
 
     // wenn die Matrix augmentiert ist, d h Ax = b -> Ab, dann muss die letzte Spalte nicht untersucht werden
     private static int findPivot(double[][] helperA, int startingRow, int isAugmented) {
